@@ -13,3 +13,10 @@ def root():
 def recommend_suppliers(charity_id: int):
     result = get_recommended_suppliers(charity_id)
     return result
+@router.get("/recommend/{charity_id}")
+def recommend_suppliers(charity_id: int):
+    try:
+        result = get_recommended_suppliers(charity_id)
+        return result
+    except Exception as e:
+        return {"error": str(e)}
