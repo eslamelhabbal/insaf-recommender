@@ -143,3 +143,6 @@ def list_ratings(charity_id: int = None, supplier_id: int = None):
                 continue
             ratings.append(record)
     return ratings
+@router.get("/")
+def root():
+    return {"message": "Welcome to Insaf Recommender API"}
