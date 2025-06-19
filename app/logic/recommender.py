@@ -36,12 +36,12 @@ def recommend_suppliers_for_charity(charity_id: int, top_n: int = 5):
 
     # Check if charity exists
     if charity_id not in charities["charity_id"].values:
-        return {"error": "Charity not found."}
+        return []
 
     # Get charity location safely
     charity_row = charities[charities["charity_id"] == charity_id]
     if charity_row.empty:
-        return {"error": "No data for this charity ID."}
+        return []
 
     charity_row = charity_row.iloc[0]
     charity_lat = charity_row["lat"]
@@ -67,3 +67,4 @@ def recommend_suppliers_for_charity(charity_id: int, top_n: int = 5):
 
     # Return top suppliers as list of dicts
     return top_suppliers[["supplier_id", "name", "avg_rating", "distance_km"]].to_dict(orient="records")
+
