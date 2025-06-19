@@ -39,7 +39,7 @@ class NewRating(BaseModel):
 
 # Routes
 
-@app.get("/recommendations/{charity_id}")
+@router.get("/recommendations/{charity_id}")
 def get_recommendations(charity_id: int):
     return recommend_suppliers_for_charity(charity_id)
 
