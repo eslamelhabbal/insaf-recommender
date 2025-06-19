@@ -3,7 +3,8 @@ from pydantic import BaseModel
 from typing import List
 import csv
 import os
-from app.logic.recommender import get_top_suppliers
+from app.logic.recommender import recommend_suppliers_for_charity
+
 
 router = APIRouter()
 
@@ -38,9 +39,10 @@ class NewRating(BaseModel):
 
 # Routes
 
-@router.get("/recommendations/{charity_id}", response_model=List[Recommendation])
-def recommend_suppliers(charity_id: int, top_n: int = 5):
-    return get_top_suppliers(charity_id, top_n)
+@app.get("/recommendations/{charity_id}")
+def get_recommendations(charity_id: int):
+    return recommend_suppliers_for_charity(charity_id)
+
 
 @router.post("/charities", status_code=201)
 def add_charity(charity: NewCharity):
