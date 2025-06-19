@@ -1,3 +1,4 @@
+
 import pandas as pd
 import math
 import os
@@ -17,8 +18,7 @@ def haversine(lat1, lon1, lat2, lon2):
     delta_phi = math.radians(lat2 - lat1)
     delta_lambda = math.radians(lon2 - lon1)
 
-    a = math.sin(delta_phi / 2) ** 2 +         math.cos(phi1) * math.cos(phi2) *         math.sin(delta_lambda / 2) ** 2
-
+    a = math.sin(delta_phi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
     return R * c
@@ -36,10 +36,14 @@ def recommend_suppliers_for_charity(charity_id: int, top_n: int = 5):
 
     # Check if charity exists
     if charity_id not in charities["charity_id"].values:
-        return []
+        return {"error": "Charity not found."}
 
-    # Get charity location
-    charity_row = charities[charities["charity_id"] == charity_id].iloc[0]
+    # Get charity location safely
+    charity_row = charities[charities["charity_id"] == charity_id]
+    if charity_row.empty:
+        return {"error": "No data for this charity ID."}
+
+    charity_row = charity_row.iloc[0]
     charity_lat = charity_row["lat"]
     charity_lng = charity_row["lng"]
 
@@ -63,6 +67,3 @@ def recommend_suppliers_for_charity(charity_id: int, top_n: int = 5):
 
     # Return top suppliers as list of dicts
     return top_suppliers[["supplier_id", "name", "avg_rating", "distance_km"]].to_dict(orient="records")
-
-def get_top_suppliers(charity_id: int, top_n: int = 5):
-    return recommend_suppliers_for_charity(charity_id, top_n)
